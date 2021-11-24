@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+</head>
+<body>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>Uploaded Video Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="vid : ${video}">
+                <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
+                <td th:text="${vid.originVideoName}"></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
