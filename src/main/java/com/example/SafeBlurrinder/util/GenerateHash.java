@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 
 public class GenerateHash {
+    //비디오 저장할 때, 원본 이름과 다르게 MD5로 hash값 생성해서 저장
     private String hash=null;
     public GenerateHash(String input){
 
@@ -23,7 +24,7 @@ public class GenerateHash {
             e.printStackTrace();
         }
 
-        System.out.println("hash: "+hash);
+//        System.out.println("hash: "+hash);
     }
 
     public String out(){
