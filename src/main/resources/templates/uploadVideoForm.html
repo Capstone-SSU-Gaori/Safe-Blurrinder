@@ -2,18 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Safe Blurrinder</title>
+
+    <link rel="stylesheet" href="css/uploadVideoForm.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 </head>
 <body>
-    <form action="/uploadVideo" method="post" enctype="multipart/form-data">
-            <label for="inputFile"><strong>첨부 파일</strong></label>
-                <div class="custom-file" id="inputFile">
-                    <input name="file" type="file" id="customFile">
-                    <label for="customFile">파일을 선택해 주세요.</label>
-                </div>
+<div class="inner">
+    <header>
+        <h1>Safe Blurrinder</h1>
+    </header>
+
+    <div class="mainBox">
+        <img src="images/videoIcon.png" id="videoIcon">
+
+        <form action="/uploadVideo" method="post" enctype="multipart/form-data">
+            <h3>블러할 동영상 업로드</h3>
+            <div class="custom-file" id="inputFile">
+                <input class="upload-name" disabled="disabled" value="파일을 선택하세요">
+                <label for="customFile" class="inputFileButton">파일선택</label>
+                <input name="file" type="file" id="customFile" style="display: none;" class="upload-hidden">
             </div>
-        </div>
-        <input type="submit" value = "업로드">
-    </form>
+            <input type="submit" value = "업로드" id="submitButton">
+        </form>
+    </div>
+
+
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var fileTarget = $('.upload-hidden');
+        fileTarget.on('change', function(){
+            if(window.FileReader){
+                var filename = $(this)[0].files[0].name;
+            } else {
+                var filename = $(this).val().split('/').pop().split('\\').pop();
+            }
+            $(this).siblings('.upload-name').val(filename);
+        });
+    });
+</script>
 </body>
 </html>
