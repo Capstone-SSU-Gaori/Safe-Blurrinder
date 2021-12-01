@@ -34,6 +34,9 @@ public class VideoController {
     //파일 업로드 후, submit 클릭 시 여기로 이동
     @PostMapping("/uploadVideo")
     public String saveVideo(@RequestParam("file") MultipartFile files) throws IOException {
+        if(files.isEmpty())
+            return "redirect:/"; // 아무파일도 안올리고 업로드 누를경우 (별도 처리 필요)
+
         String origName = files.getOriginalFilename();
         String[] splited = origName.split("\\.");
         String saveName = new GenerateHash(origName).out() + "." + splited[splited.length - 1];  //hash값.mp4 로 파일 저장, splited[splited.length-1]이 "mp4"임
@@ -59,6 +62,7 @@ public class VideoController {
 
         }
 
+        // mysql에 저장한 비디오 id를 json 형태로 저장하고 flask로 보내는 코드 시작입니다
         String url = "http://127.0.0.1:5000/getVideoId"; // flask로 보낼 url
         StringBuffer stringBuffer=new StringBuffer();
         String inputLine=null;
