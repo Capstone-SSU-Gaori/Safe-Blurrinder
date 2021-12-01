@@ -31,39 +31,6 @@ public class VideoController {
         return "uploadVideoForm";
     }
 
-//    //파일 업로드 후, submit 클릭 시 여기로 이동
-//    @PostMapping("/uploadVideo")
-//    public String saveVideo(@RequestParam("file") MultipartFile files) throws IOException {
-//        String origName=files.getOriginalFilename();
-////        System.out.println("original name: "+origName);
-//        String[] splited=origName.split("\\.");
-//        String saveName=new GenerateHash(origName).out()+"."+splited[splited.length-1];  //hash값.mp4 로 파일 저장, splited[splited.length-1]이 "mp4"임
-////        System.out.println("saved Name: "+saveName);
-//        String path=System.getProperty("user.home")+"\\GaoriVideos"; //여기서 user.home: 사용자의 홈 디렉토리(~)
-//        // -> 저같은 경우에는 User/users 라서  Users/user/GaoriVideos 폴더안에 비디오가 저장됨니다
-//
-//        if(!new File(path).exists()){  //위의 폴더가 없다면 새로 생성해줌
-//            try{
-//                new File(path).mkdir();
-//            }
-//            catch (Exception e){
-//                e.getStackTrace();
-//            }
-//        }
-//        String filePath = path + "\\" + saveName; //해당 경로에 hash값+mp4 의 파일을 새로 생성해서
-//        files.transferTo(new File(filePath));//실제로 저장시켜줌
-//
-//        Long id;
-//        try{
-//            id =videoService.saveUploadedVideo(origName,saveName,filePath); //업로드 하고 성공 시, DB에 저장된 id값 반환
-//        }catch (Exception e){
-//            System.out.println(e);
-//            return "redirect:/upload"; //DB에 저장 실패시, upload로 redirect
-//        }
-////        System.out.println("saved file id: "+id);
-//        return "redirect:/upload/"+id.toString(); //업로드 한 영상 제목 보여주는 페이지 (바로 아래)로 redirect
-//    }
-
     //파일 업로드 후, submit 클릭 시 여기로 이동
     @PostMapping("/uploadVideo")
     public String saveVideo(@RequestParam("file") MultipartFile files) throws IOException {
@@ -92,70 +59,41 @@ public class VideoController {
 
         }
 
-        String url = "http://127.0.0.1:5000/getVideoId";
+        String url = "http://127.0.0.1:5000/getVideoId"; // flask로 보낼 url
         StringBuffer stringBuffer=new StringBuffer();
+        String inputLine=null;
 
         try {
             JSONObject reqParams = new JSONObject();
-            reqParams.put("videoId", id); // 성공시에 json object에 videoId를 담는다
+            reqParams.put("videoId", id); // json object에 videoId를 담는다
 
             // Java 에서 지원하는 HTTP 관련 기능을 지원하는 URLConnection
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setDoOutput(true); //Post인 경우 데이터를 OutputStream으로 넘겨 주겠다는 설정
+
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("charset", "utf-8");
+            conn.setRequestProperty("Accept-Charset", "UTF-8");
 
-            //Post인 경우 데이터를 OutputStream으로 넘겨 주겠다는 설정
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-
-            String inputLine=null;
-
-            //Request body message에 전송
-            BufferedWriter os = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(),"UTF-8"));
+            //데이터 전송
+            OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
             os.write(reqParams.toString());
-//            OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
-
             System.out.println("reqParams = " + reqParams.toString());
 
-            //전송된 결과를 읽어옴
-//            BufferedReader bReader=new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
-//            while((inputLine=bReader.readLine())!=null){
-//                stringBuffer.append(inputLine);
-//            }
-//
             os.flush();
-            os.close();
-////            bReader.close();
+
+            // 전송된 결과를 읽어옴
+            BufferedReader bReader=new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
+            while((inputLine=bReader.readLine())!=null){
+                stringBuffer.append(inputLine);
+            }
+            bReader.close();
             conn.disconnect();
-            return stringBuffer.toString();
+            return "redirect:/upload/"+id.toString(); //업로드 한 영상 제목 보여주는 페이지 (바로 아래)로 redirect
         } catch (IOException e) {
             e.printStackTrace();
         }
         return "redirect:/upload/"+id.toString(); //업로드 한 영상 제목 보여주는 페이지 (바로 아래)로 redirect
-//        String url = "http://127.0.0.1:5000/getVideoId?videoId="+id;
-//        String sb = "";
-//
-//        try {
-//            JSONObject reqParams = new JSONObject();
-//            reqParams.put("videoId", id); // 성공시에 json object에 videoId를 담는다
-//
-//            // Java 에서 지원하는 HTTP 관련 기능을 지원하는 URLConnection
-//            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-//            conn.setRequestMethod("GET");
-//
-//            //Post인 경우 데이터를 OutputStream으로 넘겨 주겠다는 설정
-//            conn.setDoOutput(true);
-//
-//            //Request body message에 전송
-//            OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
-//            os.write(reqData.toString());
-//            System.out.println("reqParams = " + reqParams.toString());
-//            os.flush();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return "redirect:/upload/"+id.toString(); //업로드 한 영상 제목 보여주는 페이지 (바로 아래)로 redirect
     }
 
     @GetMapping("/upload/{id}")
