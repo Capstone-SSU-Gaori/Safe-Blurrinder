@@ -6,20 +6,13 @@
 </head>
 <body>
     <div>
-        <table>
-            <thead>
-            <tr>
                 <th>Uploaded Video Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="vid : ${video}">
                 <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
-                <td th:text="${vid.originVideoName}"></td>
+                <td th:text="${video.originVideoName}"></td>
 
-            </tr>
-            </tbody>
-        </table>
     </div>
+<div>
+    <video style="width:500px;" th:src="@{/video/{name}(name=${video.savedVideoName})}"controls></video>
+</div>
 </body>
 </html>
