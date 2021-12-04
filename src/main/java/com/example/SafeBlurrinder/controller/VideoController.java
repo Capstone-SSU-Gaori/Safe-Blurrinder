@@ -111,11 +111,11 @@ public class VideoController {
             return "redirect:/";
     }
 
-    @GetMapping(value = "/test.do") // flask -> spring 테스트 코드
-    public ModelAndView Test() {
+    @GetMapping("/getVideoId") // flask -> spring 테스트 코드
+    public ModelAndView sendVideoId() {
         ModelAndView mav = new ModelAndView();
 
-        String url = "http://127.0.0.1:5000/tospring"; // flask에서 데이터를 보낸 url
+        String url = "http://127.0.0.1:5000/getVideoId"; // flask에서 데이터를 보낸 url
         String sb = "";
         try {
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
@@ -139,10 +139,7 @@ public class VideoController {
             e.printStackTrace();
         }
         mav.addObject("tests", sb.toString()); //
-        //sb.toString은 value값(여기에선 test)
-        mav.addObject("fail", false);
         mav.setViewName("test");   // templates 이름
-        System.out.println("hi");
         return mav;
     }
 }
