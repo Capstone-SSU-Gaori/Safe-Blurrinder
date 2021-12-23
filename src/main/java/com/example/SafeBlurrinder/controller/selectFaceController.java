@@ -10,4 +10,9 @@ public class selectFaceController {
     public String selectFace() {
         return "selectFace";
     }
+
+    @GetMapping("/loading") //localhost:8080/loading하면 화면나옴
+    public String loading() {
+        return "loading";
+    }
 }
