@@ -138,8 +138,8 @@ public class VideoController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mav.addObject("tests", sb.toString()); //
-        mav.setViewName("test");   // templates 이름
+        mav.addObject("cropImages", sb.toString()); //
+        mav.setViewName("showCropImage");   // templates 이름
         return mav;
     }
 }
