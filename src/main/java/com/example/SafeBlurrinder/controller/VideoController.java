@@ -33,9 +33,11 @@ public class VideoController {
 
     //파일 업로드 후, submit 클릭 시 여기로 이동
     @PostMapping("/uploadVideo")
-    public String saveVideo(@RequestParam("file") MultipartFile files) throws IOException {
-        if(files.isEmpty())
-            return "redirect:/"; // 아무파일도 안올리고 업로드 누를경우 (별도 처리 필요)
+//    public String saveVideo(@RequestParam("file") MultipartFile files) throws IOException {
+    public ModelAndView sendVideoId(@RequestParam("file") MultipartFile files) throws IOException {
+//        if(files.isEmpty())
+//            return "redirect:/"; // 아무파일도 안올리고 업로드 누를경우 (별도 처리 필요)
+        ModelAndView mav = new ModelAndView();
 
         String origName = files.getOriginalFilename();
         String[] splited = origName.split("\\.");
@@ -50,7 +52,7 @@ public class VideoController {
                 e.getStackTrace();
             }
         }
-        String filePath = path + "\\" + saveName; //해당 경로에 hash값+mp4 의 파일을 새로 생성해서
+        String filePath = path + "\\" + saveName; //해당 경로에 hash값 + mp4 의 파일을 새로 생성해서
         files.transferTo(new File(filePath));//실제로 저장시켜줌
 
         Long id = 0L;
@@ -58,14 +60,14 @@ public class VideoController {
             id = videoService.saveUploadedVideo(origName, saveName, filePath); //업로드 하고 성공 시, DB에 저장된 id값 반환
         } catch (Exception e) {
             System.out.println(e);
-            return "redirect:/upload"; //DB에 저장 실패시, upload로 redirect
+//            return "redirect:/upload"; //DB에 저장 실패시, upload로 redirect
 
         }
 
         // mysql에 저장한 비디오 id를 json 형태로 저장하고 flask로 보내는 코드 시작입니다
         String url = "http://127.0.0.1:5000/getVideoId"; // flask로 보낼 url
         StringBuffer stringBuffer=new StringBuffer();
-        String inputLine=null;
+        String sb = "";
 
         try {
             JSONObject reqParams = new JSONObject();
@@ -87,41 +89,7 @@ public class VideoController {
             os.flush();
 
             // 전송된 결과를 읽어옴
-            BufferedReader bReader=new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
-            while((inputLine=bReader.readLine())!=null){
-                stringBuffer.append(inputLine);
-            }
-            bReader.close();
-            conn.disconnect();
-            return "redirect:/upload/"+id.toString(); //업로드 한 영상 제목 보여주는 페이지 (바로 아래)로 redirect
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/upload/"+id.toString(); //업로드 한 영상 제목 보여주는 페이지 (바로 아래)로 redirect
-    }
-
-    @GetMapping("/upload/{id}")
-    public String uploadResult(@PathVariable("id") Long id, Model model){
-        UploadedVideoFile video=videoService.findUploadedVideoById(id); //id값으로 video객체 찾아와서
-        if(video!=null) {
-            model.addAttribute("video",video); //model에 저장 -> 나중에 html파일에서 이름 표시!
-            return "uploadSuccess";
-        }
-        else//DB에서 해당 id값으로 저장된 data를 찾을 수 없다면, upload로 redirect
-            return "redirect:/";
-    }
-
-    @GetMapping("/getVideoId") // flask -> spring 테스트 코드
-    public ModelAndView sendVideoId() {
-        ModelAndView mav = new ModelAndView();
-
-        String url = "http://127.0.0.1:5000/getVideoId"; // flask에서 데이터를 보낸 url
-        String sb = "";
-        try {
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-
+            BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
             String line = null;
 
             while ((line = br.readLine()) != null) {
@@ -133,13 +101,28 @@ public class VideoController {
             }
             br.close();
             System.out.println("" + sb.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+//            return "redirect:/select";
+            mav.addObject("cropImages", sb.toString()); //
+            mav.setViewName("redirect:/selectFace");   // templates 이름
+            return mav;
+            //            return "redirect:/upload/"+id.toString(); //업로드 한 영상 제목 보여주는 페이지 (바로 아래)로 redirect
         } catch (IOException e) {
             e.printStackTrace();
         }
         mav.addObject("cropImages", sb.toString()); //
-        mav.setViewName("showCropImage");   // templates 이름
+        mav.setViewName("redirect:/selectFace");   // templates 이름
         return mav;
+//        return "redirect:/upload/"+id.toString(); //업로드 한 영상 제목 보여주는 페이지 (바로 아래)로 redirect
+    }
+
+    @GetMapping("/upload/{id}")
+    public String uploadResult(@PathVariable("id") Long id, Model model){
+        UploadedVideoFile video=videoService.findUploadedVideoById(id); //id값으로 video객체 찾아와서
+        if(video!=null) {
+            model.addAttribute("video",video); //model에 저장 -> 나중에 html파일에서 이름 표시!
+            return "uploadSuccess";
+        }
+        else//DB에서 해당 id값으로 저장된 data를 찾을 수 없다면, upload로 redirect
+            return "redirect:/";
     }
 }
