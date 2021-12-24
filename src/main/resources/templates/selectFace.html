@@ -22,10 +22,9 @@
         </div>
         <div class="middleBox">
             <div class="leftBox" id="leftBox">
-
-            </div>
-            <div class="rightBox">
-                <video src="short.mp4" controls></video>
+                <th>Processed Video </th>
+                <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
+                <td th:text="${cropImages}"></td>
             </div>
         </div>
         <div class="bottomBox">
@@ -35,13 +34,20 @@
 </div>
 
 <script type="text/javascript">
-    const imageCount = 10; //image 개수
+    var cropImages = "${cropImages}";
+    console.log(cropImages);
+    var cropImagesObj = JSON.parse(cropImages);
+<!--    console.log(-->
+    console.log(cropImages[0]);
+    const imageCount = cropImages.length; // image 개수
     var images = new Array(imageCount); //이미지들
     var imageClick=new Array(imageCount); //클릭했는지
-
     for (var i = 0; i < imageCount; i++) {
         images[i] = new Image();
-        images[i].src = "images/videoIcon.png"; //여기서 이미지 넣는데 어떻게 넣어야 하지
+<!--        images[i].src = cropImages.i+1-->
+<!--        images[i].src = "images/videoIcon.png"; //여기서 이미지 넣는데 어떻게 넣어야 하지-->
+        images[i].src = cropImages[i].i+1; //여기서 이미지 넣는데 어떻게 넣어야 하지
+
         images[i].id=i.toString();
         document.getElementById("leftBox").appendChild(images[i]);
         imageClick[i]=0;
