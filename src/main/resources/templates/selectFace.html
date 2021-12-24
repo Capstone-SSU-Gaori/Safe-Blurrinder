@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <title>Safe Blurrinder</title>
     <link rel="stylesheet" href="css/selectFace.css">
-
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-
 </head>
 
 <body>
@@ -22,9 +20,6 @@
         </div>
         <div class="middleBox">
             <div class="leftBox" id="leftBox">
-                <th>Processed Video </th>
-                <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
-                <td th:text="${cropImages}"></td>
             </div>
         </div>
         <div class="bottomBox">
@@ -34,7 +29,7 @@
 </div>
 
 <script type="text/javascript">
-    var cropImages = "${cropImages}";
+    var cropImages = cropImages;
     console.log(cropImages);
     var cropImagesObj = JSON.parse(cropImages);
 <!--    console.log(-->

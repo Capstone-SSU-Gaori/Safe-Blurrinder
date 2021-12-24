@@ -204,11 +204,16 @@ public class VideoController {
                     strBuf.insert(k, "\\");
                     k++;
                 }
+                if (strBuf.charAt(k) == '\\'){
+                    if(strBuf.charAt(k+1) == '\\'){
+                        strBuf.insert(k, "\\\\");
+                        k+=2;
+                    }
+                }
             }
-
             System.out.println("strBuf.toString() = " + strBuf.toString());
-            JSONObject jsonObj = (JSONObject) new JSONParser().parse(strBuf.toString());
-
+            JSONObject jsonObj = new JSONObject((String)new JSONParser().parse(strBuf.toString()));
+            System.out.println("jsonObj = " + jsonObj);
             model.addAttribute("cropImages", jsonObj);
             return "redirect:/select";
         } catch (IOException | ParseException e) {
