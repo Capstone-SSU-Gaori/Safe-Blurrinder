@@ -4,6 +4,7 @@ import com.example.SafeBlurrinder.domain.UploadedVideoFile;
 import com.example.SafeBlurrinder.service.VideoService;
 import com.example.SafeBlurrinder.util.GenerateHash;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class VideoController {
@@ -191,7 +194,6 @@ public class VideoController {
 
             tempObject = sb.toString();
             StringBuilder strBuf = new StringBuilder(tempObject);
-//        System.out.println("strBuf.toString() = " + strBuf.toString());
             strBuf.insert(0, '"');
             strBuf.insert(strBuf.length()-1, '"');
             System.out.println(strBuf.toString());
@@ -199,7 +201,6 @@ public class VideoController {
             for (int k = 0; k < strBuf.toString().length(); k++) {
                 if (k == 0 || k==strBuf.toString().length()-2)
                     continue;
-//            System.out.println("strBuf.charAt(k) = " + strBuf.charAt(k));
                 if (strBuf.charAt(k) == '"') {
                     strBuf.insert(k, "\\");
                     k++;
@@ -211,12 +212,38 @@ public class VideoController {
                     }
                 }
             }
-            System.out.println("strBuf.toString() = " + strBuf.toString());
-            JSONObject jsonObj = new JSONObject((String)new JSONParser().parse(strBuf.toString()));
-            System.out.println("jsonObj = " + jsonObj);
-            model.addAttribute("cropImages", jsonObj);
+//            System.out.println("strBuf.toString() = " + strBuf.toString());
+//            JSONObject jsonObj = new JSONObject((String)new JSONParser().parse(strBuf.toString()));
+//            JSONArray jsonArray = new JSONArray();
+//            jsonArray.put(jsonObj);
+//            System.out.println("jsonObj = " + jsonObj);
+//            System.out.println("jsonArray = " + jsonArray);
+
+
+            List<Product> productList = new ArrayList<Product>();
+
+            Product product1 = new Product(1, "Hot Chicken", "C-1", "핫치킨");
+            Product product2 = new Product(1, "Cheese Chicken", "C-2", "치즈 가루 치킨");
+            Product product3 = new Product(1, "Honey Chicken", "C-3", "허니 버터 치킨");
+            productList.add(product1);
+            productList.add(product2);
+
+            productList.add(product3);
+
+
+            JSONArray jsonArray = new JSONArray();
+
+            model.addAttribute("list", productList);
+            model.addAttribute("jsonList", new JSONArray(productList));
+
+//            return "index";
+
+
+//            model.addAttribute("cropImages", jsonObj);
+//            model.addAttribute("cropImages", jsonArray);
             return "redirect:/select";
-        } catch (IOException | ParseException e) {
+//        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return "redirect:/";

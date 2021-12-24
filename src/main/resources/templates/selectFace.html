@@ -20,6 +20,12 @@
         </div>
         <div class="middleBox">
             <div class="leftBox" id="leftBox">
+                <script th:inline="javascript" type="text/javascript">
+                    var domain = [[${cropImages}]]
+                    console.log(domain);
+                </script>
+
+                </tbody>
             </div>
         </div>
         <div class="bottomBox">
@@ -28,12 +34,26 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
+ console.log(`${list}`)
+ console.log(`${jsonList}`)
+
+ var list = `${list}`;
+ var arrayList = new Array(`${list}`);
+ console.log(list);
+ console.log(arrayList);
+
+ var json = JSON.parse(`${jsonList}`);
+ console.log(json);
+
+<!--<script type="text/javascript">-->
+     console.log('${cropImages}')
+    console.log(`${cropImages}`);
+    var json = JSON.parse(`${cropImages}`);
+    console.log(json);
     var cropImages = cropImages;
     console.log(cropImages);
     var cropImagesObj = JSON.parse(cropImages);
-<!--    console.log(-->
-    console.log(cropImages[0]);
     const imageCount = cropImages.length; // image 개수
     var images = new Array(imageCount); //이미지들
     var imageClick=new Array(imageCount); //클릭했는지
