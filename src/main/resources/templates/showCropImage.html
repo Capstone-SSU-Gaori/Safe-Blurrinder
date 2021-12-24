@@ -17,8 +17,6 @@
         <tr th:each="cropImage : ${cropImages}">
             <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
             <td th:src="@{/cropImage}"></td>
-            <video style="width:500px;" th:src="@{/video/{name}(name=${cropImage})}"controls></video>
-
         </tr>
         </tbody>
     </table>
