@@ -156,77 +156,88 @@ public class VideoController {
             return "redirect:/upload"; //DB에 저장 실패시, upload로 redirect
         }
 
-        // mysql에 저장한 비디오 id를 json 형태로 저장하고 flask로 보내는 코드 시작입니다
-        String url = "http://127.0.0.1:5000/getVideoId"; // flask로 보낼 url
-        StringBuffer stringBuffer=new StringBuffer();
-        String sb = "";
-        String tempObject= "";
-        try {
-            JSONObject reqParams = new JSONObject();
-            reqParams.put("videoId", id); // json object에 videoId를 담는다
+        return "redirect:/upload/"+id;
+        /**
+         * 이 밑 ~ uploadVideo 끝까지 기존의 파트 밑의 processVideo/{id}로 옮겨놨어용~~
+         */
 
-            // Java 에서 지원하는 HTTP 관련 기능을 지원하는 URLConnection
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setDoOutput(true); //Post인 경우 데이터를 OutputStream으로 넘겨 주겠다는 설정
-
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept-Charset", "UTF-8");
-
-            //데이터 전송
-            OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
-            os.write(reqParams.toString());
-            System.out.println("reqParams = " + reqParams.toString());
-
-            os.flush();
-
-            // 전송된 결과를 읽어옴
-            BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
-            String line = null;
-
-            while ((line = br.readLine()) != null) {
-                sb = sb + line + "\n";
-            }
-            System.out.println("========br======\n" + sb.toString());
-            if (sb.toString().contains("ok")) {
-                System.out.println("test");
-            }
-            br.close();
-
-            tempObject = sb.toString();
-//            StringBuilder strBuf = new StringBuilder(tempObject);
-//            strBuf.insert(0, '"');
-//            strBuf.insert(strBuf.length()-1, '"');
-//            System.out.println(strBuf.toString());
+//        // mysql에 저장한 비디오 id를 json 형태로 저장하고 flask로 보내는 코드 시작입니다
+//        String url = "http://127.0.0.1:5000/getVideoId"; // flask로 보낼 url
+//        StringBuffer stringBuffer=new StringBuffer();
+//        String sb = "";
+//        String tempObject= "";
+//        try {
+//            JSONObject reqParams = new JSONObject();
+//            reqParams.put("videoId", id); // json object에 videoId를 담는다
 //
-//            for (int k = 0; k < strBuf.toString().length(); k++) {
-//                if (k == 0 || k==strBuf.toString().length()-2)
-//                    continue;
-//                if (strBuf.charAt(k) == '"') {
-//                    strBuf.insert(k, "\\");
-//                    k++;
-//                }
-//                if (strBuf.charAt(k) == '\\'){
-//                    if(strBuf.charAt(k+1) == '\\'){
-//                        strBuf.insert(k, "\\\\");
-//                        k+=2;
-//                    }
-//                }
+//            // Java 에서 지원하는 HTTP 관련 기능을 지원하는 URLConnection
+//            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+//            conn.setDoOutput(true); //Post인 경우 데이터를 OutputStream으로 넘겨 주겠다는 설정
+//
+//            conn.setRequestMethod("POST");
+//            conn.setRequestProperty("Content-Type", "application/json");
+//            conn.setRequestProperty("Accept-Charset", "UTF-8");
+//
+//            //데이터 전송
+//            OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
+//            os.write(reqParams.toString());
+//            System.out.println("reqParams = " + reqParams.toString());
+//
+//            os.flush();
+//
+//            // 전송된 결과를 읽어옴
+//            BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
+//            String line = null;
+//
+//            while ((line = br.readLine()) != null) {
+//                sb = sb + line + "\n";
 //            }
+//            System.out.println("========br======\n" + sb.toString());
+//            if (sb.toString().contains("ok")) {
+//                System.out.println("test");
+//            }
+//            br.close();
 //
-//            System.out.println("strBuf.toString() = " + strBuf.toString());
-//            JSONObject jsonObj = new JSONObject((String)new JSONParser().parse(strBuf.toString()));
+//            tempObject = sb.toString();
+////            StringBuilder strBuf = new StringBuilder(tempObject);
+////            strBuf.insert(0, '"');
+////            strBuf.insert(strBuf.length()-1, '"');
+////            System.out.println(strBuf.toString());
+////
+////            for (int k = 0; k < strBuf.toString().length(); k++) {
+////                if (k == 0 || k==strBuf.toString().length()-2)
+////                    continue;
+////                if (strBuf.charAt(k) == '"') {
+////                    strBuf.insert(k, "\\");
+////                    k++;
+////                }
+////                if (strBuf.charAt(k) == '\\'){
+////                    if(strBuf.charAt(k+1) == '\\'){
+////                        strBuf.insert(k, "\\\\");
+////                        k+=2;
+////                    }
+////                }
+////            }
+////
+////            System.out.println("strBuf.toString() = " + strBuf.toString());
+////            JSONObject jsonObj = new JSONObject((String)new JSONParser().parse(strBuf.toString()));
+//
+////            System.out.println("jsonObj = " + jsonObj);
+////            System.out.println("jsonArray = " + jsonArray);
+//            model.addAttribute("cropImages", tempObject);
+////            model.addAttribute("cropImages", jsonArray);
+////            model.addAttribute("cropImages", cropImages);
+//            return "selectFace";
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return "redirect:/";
 
-//            System.out.println("jsonObj = " + jsonObj);
-//            System.out.println("jsonArray = " + jsonArray);
-            model.addAttribute("cropImages", tempObject);
-//            model.addAttribute("cropImages", jsonArray);
-//            model.addAttribute("cropImages", cropImages);
-            return "selectFace";
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/";
+        /**
+         * 위~ 여기까지 processVideo로 옮김 -> 영상 재업로드, 진행 버튼 선택하고 FLASK로 보내도록
+         */
+
+
     }
 
 //    //파일 업로드 후, submit 클릭 시 여기로 이동
@@ -317,8 +328,9 @@ public class VideoController {
 //            e.printStackTrace();
 //        }
 //        return "redirect:/";
-//    }
+//   }
 
+    //여기서 영상 재업로드 or 처리 진행 화면으로 넘어감
     @GetMapping("/upload/{id}")
     public String uploadResult(@PathVariable("id") Long id, Model model){
         UploadedVideoFile video=videoService.findUploadedVideoById(id); //id값으로 video객체 찾아와서
@@ -328,5 +340,81 @@ public class VideoController {
         }
         else//DB에서 해당 id값으로 저장된 data를 찾을 수 없다면, upload로 redirect
             return "redirect:/";
+    }
+
+    // "처리 진행" 버튼 선택하면 여기서 FLASK로 데이터 보내고, 결과 받으면 selectFace로 넘어감
+    @GetMapping("/processVideo/{id}")
+    public String processVideo(Model model, @PathVariable("id") Long id){
+        // mysql에 저장한 비디오 id를 json 형태로 저장하고 flask로 보내는 코드 시작입니다
+        String url = "http://127.0.0.1:5000/getVideoId"; // flask로 보낼 url
+        StringBuffer stringBuffer=new StringBuffer();
+        String sb = "";
+        String tempObject= "";
+        try {
+            JSONObject reqParams = new JSONObject();
+            reqParams.put("videoId", id); // json object에 videoId를 담는다
+
+            // Java 에서 지원하는 HTTP 관련 기능을 지원하는 URLConnection
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setDoOutput(true); //Post인 경우 데이터를 OutputStream으로 넘겨 주겠다는 설정
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept-Charset", "UTF-8");
+
+            //데이터 전송
+            OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
+            os.write(reqParams.toString());
+            System.out.println("reqParams = " + reqParams.toString());
+
+            os.flush();
+
+            // 전송된 결과를 읽어옴
+            BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
+            String line = null;
+
+            while ((line = br.readLine()) != null) {
+                sb = sb + line + "\n";
+            }
+            System.out.println("========br======\n" + sb.toString());
+            if (sb.toString().contains("ok")) {
+                System.out.println("test");
+            }
+            br.close();
+
+            tempObject = sb.toString();
+//            StringBuilder strBuf = new StringBuilder(tempObject);
+//            strBuf.insert(0, '"');
+//            strBuf.insert(strBuf.length()-1, '"');
+//            System.out.println(strBuf.toString());
+//
+//            for (int k = 0; k < strBuf.toString().length(); k++) {
+//                if (k == 0 || k==strBuf.toString().length()-2)
+//                    continue;
+//                if (strBuf.charAt(k) == '"') {
+//                    strBuf.insert(k, "\\");
+//                    k++;
+//                }
+//                if (strBuf.charAt(k) == '\\'){
+//                    if(strBuf.charAt(k+1) == '\\'){
+//                        strBuf.insert(k, "\\\\");
+//                        k+=2;
+//                    }
+//                }
+//            }
+//
+//            System.out.println("strBuf.toString() = " + strBuf.toString());
+//            JSONObject jsonObj = new JSONObject((String)new JSONParser().parse(strBuf.toString()));
+
+//            System.out.println("jsonObj = " + jsonObj);
+//            System.out.println("jsonArray = " + jsonArray);
+            model.addAttribute("cropImages", tempObject);
+//            model.addAttribute("cropImages", jsonArray);
+//            model.addAttribute("cropImages", cropImages);
+            return "selectFace";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/";
     }
 }

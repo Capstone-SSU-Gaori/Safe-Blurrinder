@@ -14,5 +14,9 @@
 <div>
     <video style="width:500px;" th:src="@{/video/{name}(name=${video.savedVideoName})}"controls></video>
 </div>
+<div>
+    <a th:href="@{http://localhost:8080/processVideo/{id}(id=${video._id})}">처리 진행</a>
+    <a href="http://localhost:8080/">영상 재업로드</a>
+</div>
 </body>
 </html>
