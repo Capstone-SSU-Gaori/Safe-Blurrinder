@@ -369,10 +369,12 @@ public class VideoController {
 
             os.flush();
 
+            System.out.println("waiting");
             // 전송된 결과를 읽어옴
             BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
             String line = null;
 
+            System.out.println("before while");
             while ((line = br.readLine()) != null) {
                 sb = sb + line + "\n";
             }
@@ -417,4 +419,5 @@ public class VideoController {
         }
         return "redirect:/";
     }
+
 }
