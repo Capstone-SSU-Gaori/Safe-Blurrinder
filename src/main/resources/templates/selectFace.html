@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <title>Safe Blurrinder</title>
     <link rel="stylesheet" href="css/selectFace.css">
-
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-
 </head>
 
 <body>
@@ -24,9 +22,6 @@
             <div class="leftBox" id="leftBox">
 
             </div>
-            <div class="rightBox">
-                <video src="short.mp4" controls></video>
-            </div>
         </div>
         <div class="bottomBox">
             <p onclick="" class="submitButton">선택 완료</p>
@@ -34,45 +29,52 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    const imageCount = 10; //image 개수
-    var images = new Array(imageCount); //이미지들
-    var imageClick=new Array(imageCount); //클릭했는지
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+        var result=/*[[${cropImages}]]*/
+        console.log(result);
+        console.log(typeof(result));
 
-    for (var i = 0; i < imageCount; i++) {
-        images[i] = new Image();
-        images[i].src = "images/videoIcon.png"; //여기서 이미지 넣는데 어떻게 넣어야 하지
-        images[i].id=i.toString();
-        document.getElementById("leftBox").appendChild(images[i]);
-        imageClick[i]=0;
-    }
+        var objData = JSON.parse(result);
+        console.log(objData);
+        console.log(typeof(objData));
 
+        const imageCount = objData['cropImages'].length; // image 개수
+        var images = new Array(imageCount); //이미지들
+        var imageClick=new Array(imageCount); //클릭했는지
 
-    $(function () { //클릭하는 부분
-        $("img").mousedown(function () {
-        })
-            .click(function () {
-                if (imageClick[$(this).attr("id")] == 1) {
-                    imageClick[$(this).attr("id")] = 0;
-                    document.getElementById($(this).attr("id")).style.outline = "none";
-                } else {
-                    imageClick[$(this).attr("id")] = 1;
+        for(var i in objData['cropImages']){
+            for(var key in objData['cropImages'][i]){
+                images[i] = new Image();
+                images[i].src = objData['cropImages'][i][key]; //여기서 이미지 넣는데 어떻게 넣어야 하지
+                images[i].id=i.toString();
+                document.getElementById("leftBox").appendChild(images[i]);
+                imageClick[i]=0;
+            }
+        }
+
+        $(function () { //클릭하는 부분
+            $("img").mousedown(function () {
+            })
+                .click(function () {
+                    if (imageClick[$(this).attr("id")] == 1) {
+                        imageClick[$(this).attr("id")] = 0;
+                        document.getElementById($(this).attr("id")).style.outline = "none";
+                    } else {
+                        imageClick[$(this).attr("id")] = 1;
+                        document.getElementById($(this).attr("id")).style.outline = "solid 4px #6881D0";
+                    }
+
+                })
+                .mouseover(function() {
                     document.getElementById($(this).attr("id")).style.outline = "solid 4px #6881D0";
-                }
-
-            })
-            .mouseover(function() {
-                document.getElementById($(this).attr("id")).style.outline = "solid 4px #6881D0";
-            })
-            .mouseleave(function() {
-                if(imageClick[$(this).attr("id")] == 0)
-                    document.getElementById($(this).attr("id")).style.outline = "none";
-            })
-    });
-
-
+                })
+                .mouseleave(function() {
+                    if(imageClick[$(this).attr("id")] == 0)
+                        document.getElementById($(this).attr("id")).style.outline = "none";
+                })
+        });
+    /*]]>*/
 </script>
-
 </body>
-
 </html>
