@@ -24,7 +24,34 @@
             </div>
         </div>
         <div class="bottomBox">
-            <p onclick="" class="submitButton">선택 완료</p>
+            <p onclick="" class="submitButton" id="submit-test">선택 완료</p>
+            <script type="text/javascript" th:inline="javascript">
+                                  /*<![CDATA[*/
+                                  $("#submit-test").click(function(){
+                                      var saved_id=0;
+                                      var id=/*[[${_id}]]*/
+
+                                      clickedIds.unshift(id);
+                                      $.ajax({
+                                          url:'http://localhost:8080/sendTarget',
+                                          type:'post',
+                                          traditional:true,
+                                          redirect:'follow',
+                                          data:{
+                                              clickedIds:clickedIds
+                                          },
+                                          success:function(response){
+                                              console.log("success");
+                                              saved_id=response;
+                                              console.log(saved_id);
+                                          }
+                                      }).then(response=>window.location.href = "http://localhost:8080/loading2/"+saved_id);
+
+                                   });
+                                /*]]>*/
+
+            </script>
+
         </div>
     </div>
 </div>
@@ -32,6 +59,52 @@
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
         var result=/*[[${cropImages}]]*/
+//         var objData={
+//   "cropImages": [
+//     {
+//       "frame1": "0.png"
+//     },
+//     {
+//       "frame2": "1.png"
+//     },
+//     {
+//       "frame3": "2.png"
+//     },
+//     {
+//       "frame4": "3.png"
+//     },
+//     {
+//       "frame5": "4.png"
+//     },
+//     {
+//       "frame6": "5.png"
+//     },
+//     {
+//       "frame7": "6.png"
+//     },
+//     {
+//       "frame2": "7.png"
+//     },
+//     {
+//       "frame3": "8.png"
+//     },
+//     {
+//       "frame8": "9.png"
+//     },
+//     {
+//       "frame6": "10.png"
+//     },
+//     {
+//       "frame3": "11.png"
+//     },
+//     {
+//       "frame2": "12.png"
+//     },
+//     {
+//       "frame9": "13.png"
+//     }
+//   ]
+// };
         console.log(result);
         console.log(typeof(result));
 
@@ -42,13 +115,17 @@
         const imageCount = objData['cropImages'].length; // image 개수
         var images = new Array(imageCount); //이미지들
         var imageClick=new Array(imageCount); //클릭했는지
+        var clickedIds=[];
         var testUrl='/selectImg/'
 
         for(var i in objData['cropImages']){
             for(var key in objData['cropImages'][i]){
                 images[i] = new Image();
                 images[i].src = testUrl+objData['cropImages'][i][key]; //여기서 이미지 넣는데 어떻게 넣어야 하지
-                images[i].id=i.toString();
+                // images[i].src=objData['cropImages'][i][key];
+                images[i].id=i.toString(); // 선택한 객체의 index (선택한 이미지 분류용)
+                const splited=key.split("e");
+                images[i].name=splited[1]; //frame2의 2 가 이미지 이름으로 들어감
                 document.getElementById("leftBox").appendChild(images[i]);
                 imageClick[i]=0;
             }
@@ -60,9 +137,14 @@
                 .click(function () {
                     if (imageClick[$(this).attr("id")] == 1) {
                         imageClick[$(this).attr("id")] = 0;
+                        const idx = clickedIds.indexOf($(this).attr("name"))
+                        if (idx > -1) clickedIds.splice(idx, 1)
+                        console.log(clickedIds)
                         document.getElementById($(this).attr("id")).style.outline = "none";
                     } else {
                         imageClick[$(this).attr("id")] = 1;
+                        clickedIds.push($(this).attr("name"));
+                        console.log(clickedIds)
                         document.getElementById($(this).attr("id")).style.outline = "solid 4px #6881D0";
                     }
 
