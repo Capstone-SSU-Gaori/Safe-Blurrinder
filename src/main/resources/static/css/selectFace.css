@@ -48,7 +48,12 @@ h1 {
 }
 
 .rightBox {
-    width:50%;
+    width:40%;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-flow:wrap;
+    overflow: scroll;
 }
 
 .bottomBox {

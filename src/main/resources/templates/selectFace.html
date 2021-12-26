@@ -22,34 +22,36 @@
             <div class="leftBox" id="leftBox">
 
             </div>
+            <div class="rightBox" id="rightBox">
+
+            </div>
         </div>
         <div class="bottomBox">
             <p onclick="" class="submitButton" id="submit-test">선택 완료</p>
             <script type="text/javascript" th:inline="javascript">
-                                  /*<![CDATA[*/
-                                  $("#submit-test").click(function(){
-                                      var saved_id=0;
-                                      var id=/*[[${_id}]]*/
+                 /*<![CDATA[*/
+                    $("#submit-test").click(function(){
+                        var saved_id=0;
+                        var id=/*[[${_id}]]*/
 
-                                      clickedIds.unshift(id);
-                                      $.ajax({
-                                          url:'http://localhost:8080/sendTarget',
-                                          type:'post',
-                                          traditional:true,
-                                          redirect:'follow',
-                                          data:{
-                                              clickedIds:clickedIds
-                                          },
-                                          success:function(response){
-                                              console.log("success");
-                                              saved_id=response;
-                                              console.log(saved_id);
-                                          }
-                                      }).then(response=>window.location.href = "http://localhost:8080/loading2/"+saved_id);
+                        clickedIds.unshift(id);
+                        $.ajax({
+                            url:'http://localhost:8080/sendTarget',
+                            type:'post',
+                            traditional:true,
+                            redirect:'follow',
+                            data:{
+                                clickedIds:clickedIds
+                            },
+                            success:function(response){
+                                console.log("success");
+                                saved_id=response;
+                                console.log(saved_id);
+                            }
+                        }).then(response=>window.location.href = "http://localhost:8080/loading2/"+saved_id);
 
-                                   });
-                                /*]]>*/
-
+                     });
+                  /*]]>*/
             </script>
 
         </div>
@@ -114,40 +116,60 @@
 
         const imageCount = objData['cropImages'].length; // image 개수
         var images = new Array(imageCount); //이미지들
+        var cloneImages = new Array(imageCount);
         var imageClick=new Array(imageCount); //클릭했는지
+        var cloneImageClick = new Array(imageCount);
         var clickedIds=[];
         var testUrl='/selectImg/'
 
         for(var i in objData['cropImages']){
             for(var key in objData['cropImages'][i]){
-                images[i] = new Image();
-                images[i].src = testUrl+objData['cropImages'][i][key]; //여기서 이미지 넣는데 어떻게 넣어야 하지
-                // images[i].src=objData['cropImages'][i][key];
-                images[i].id=i.toString(); // 선택한 객체의 index (선택한 이미지 분류용)
+                images[i] = cloneImages[i] = new Image();
+                images[i].src = cloneImages[i].src = testUrl+objData['cropImages'][i][key]; //여기서 이미지 넣는데 어떻게 넣어야 하지
+                images[i].id= cloneImages[i].id = i.toString(); // 선택한 객체의 index (선택한 이미지 분류용)
                 const splited=key.split("e");
-                images[i].name=splited[1]; //frame2의 2 가 이미지 이름으로 들어감
+                images[i].name = cloneImages[i].name = splited[1]; //frame2의 2 가 이미지 이름으로 들어감
                 document.getElementById("leftBox").appendChild(images[i]);
-                imageClick[i]=0;
+                imageClick[i] = cloneImageClick[i] = 0;
+
             }
         }
+
 
         $(function () { //클릭하는 부분
             $("img").mousedown(function () {
             })
                 .click(function () {
-                    if (imageClick[$(this).attr("id")] == 1) {
+                    if (imageClick[$(this).attr("id")] == 1) { // 클릭되어있으면
                         imageClick[$(this).attr("id")] = 0;
                         const idx = clickedIds.indexOf($(this).attr("name"))
-                        if (idx > -1) clickedIds.splice(idx, 1)
+                        var frameNum = Number(clickedIds[idx]); // 삭제할 이미지의 프레임 번호 받아오기
+                        console.log(frameNum);
+                        if (idx > -1) clickedIds.splice(idx, 1) // 클릭한 애를 배열에서 빼주기
                         console.log(clickedIds)
                         document.getElementById($(this).attr("id")).style.outline = "none";
-                    } else {
+
+                        for(var j=0;j<images.length;j++){
+                            if(Number(images[j].name) === frameNum)
+                                document.getElementById("rightBox").removeChild(cloneImages[j]);
+                        }
+                        // document.getElementById("leftBox").insertBefore(newItem,criteriaItem); // 왼쪽 박스에 선택한 애는 그대로 남아 있도록
+                    } else { // 클릭되어있지 않으면
                         imageClick[$(this).attr("id")] = 1;
-                        clickedIds.push($(this).attr("name"));
+                        clickedIds.push($(this).attr("name")); // 클릭하면 해당 요소의 name 값(프레임번호)을 clickedIds에 넣음
                         console.log(clickedIds)
                         document.getElementById($(this).attr("id")).style.outline = "solid 4px #6881D0";
-                    }
+                        var newItem = document.getElementById($(this).attr("id"));
+                        var criteriaItem = document.getElementById(String(Number($(this).attr("id"))+1))
 
+                        var clickedId = Number(clickedIds[clickedIds.length-1])
+                        for(var j=0;j<images.length;j++){
+                            if(Number(images[j].name) === clickedId){ // 같은 프레임이면
+                                document.getElementById("rightBox").appendChild(cloneImages[j]);
+                            }
+                        }
+                        // document.getElementById("leftBox").insertBefore(newItem,criteriaItem); // 왼쪽 박스에 선택한 애는 그대로 남아 있도록
+                    }
                 })
                 .mouseover(function() {
                     document.getElementById($(this).attr("id")).style.outline = "solid 4px #6881D0";
