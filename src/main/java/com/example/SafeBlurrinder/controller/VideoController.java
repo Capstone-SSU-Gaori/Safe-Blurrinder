@@ -1,6 +1,8 @@
 package com.example.SafeBlurrinder.controller;
 
+import com.example.SafeBlurrinder.domain.ProcessedVideoFile;
 import com.example.SafeBlurrinder.domain.UploadedVideoFile;
+import com.example.SafeBlurrinder.service.ProcessedVideoService;
 import com.example.SafeBlurrinder.service.VideoService;
 import com.example.SafeBlurrinder.util.GenerateHash;
 
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.json.simple.parser.JSONParser;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -28,10 +31,12 @@ import java.util.List;
 @Controller
 public class VideoController {
     private VideoService videoService;
+    private ProcessedVideoService processedVideoService;
 
     @Autowired
-    public VideoController(VideoService videoService) {
+    public VideoController(VideoService videoService,ProcessedVideoService processedVideoService) {
         this.videoService = videoService;
+        this.processedVideoService=processedVideoService;
     }
 
     //root 페이지 -> localhost:8080 -> 비디오 업로드 화면 등장~
@@ -424,6 +429,7 @@ public class VideoController {
 //            System.out.println("jsonObj = " + jsonObj);
 //            System.out.println("jsonArray = " + jsonArray);
             model.addAttribute("cropImages", tempObject);
+            model.addAttribute("_id",id);
 //            model.addAttribute("cropImages", jsonArray);
 //            model.addAttribute("cropImages", cropImages);
             return "selectFace";
@@ -432,5 +438,7 @@ public class VideoController {
         }
         return "redirect:/";
     }
+
+
 
 }
