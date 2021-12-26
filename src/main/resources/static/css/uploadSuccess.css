@@ -50,10 +50,9 @@ h1 {
     border:none;
     border-radius: 20px;
     background-color: #c4c4c4;
-    padding-top:10px;
-    padding-bottom:10px;
-    padding-left: 50px;
-    padding-right:50px;
+    padding-top:20px;
+    padding-bottom:20px;
+    width:400px;
     font-size:15px;
     font-weight: 600;
     cursor: pointer;
