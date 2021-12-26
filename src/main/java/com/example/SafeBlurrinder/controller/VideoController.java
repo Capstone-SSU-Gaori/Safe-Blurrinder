@@ -342,6 +342,19 @@ public class VideoController {
             return "redirect:/";
     }
 
+    @GetMapping("/loading/{id}") //localhost:8080/loading하면 화면나옴
+    public String loading(Model model, @PathVariable("id") Long id)
+    {
+        UploadedVideoFile video=videoService.findUploadedVideoById(id);
+        if(video!=null) {
+            model.addAttribute("video",video); //model에 저장 -> 나중에 html파일에서 이름 표시!
+            return "loading";
+        }
+        else//DB에서 해당 id값으로 저장된 data를 찾을 수 없다면, upload로 redirect
+            return "redirect:/";
+
+    }
+
     // "처리 진행" 버튼 선택하면 여기서 FLASK로 데이터 보내고, 결과 받으면 selectFace로 넘어감
     @GetMapping("/processVideo/{id}")
     public String processVideo(Model model, @PathVariable("id") Long id){
