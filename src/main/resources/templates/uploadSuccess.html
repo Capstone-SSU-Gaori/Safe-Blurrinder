@@ -2,21 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Result</title>
+    <title>Safe Blurrinder</title>
+
+    <link rel="stylesheet" href="/css/uploadSuccess.css">
 </head>
 <body>
-    <div>
-                <th>Uploaded Video Name</th>
-                <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
-                <td th:text="${video.originVideoName}"></td>
+
+<div class="inner">
+    <header>
+        <h1>Safe Blurrinder</h1>
+    </header>
+
+    <div class="mainBox">
+        <div class="videoBox">
+            <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
+            <video style="width:500px;" th:src="@{/video/{name}(name=${video.savedVideoName})}"controls></video>
+            <td th:text="${video.originVideoName}"></td>
+        </div>
+        <div class="selectBox">
+            <h2>블러처리를 진행하시겠습니까?</h2>
+            <div class="buttonBox">
+                <a th:href="@{http://localhost:8080/loading/{id}(id=${video._id})}" class="btn">예, 블러처리 해주세요</a>
+                <a href="http://localhost:8080/" class="btn">아니오, 재업로드 할게요</a>
+            </div>
+        </div>
 
     </div>
-<div>
-    <video style="width:500px;" th:src="@{/video/{name}(name=${video.savedVideoName})}"controls></video>
-</div>
-<div>
-    <a th:href="@{http://localhost:8080/processVideo/{id}(id=${video._id})}">처리 진행</a>
-    <a href="http://localhost:8080/">영상 재업로드</a>
+
 </div>
 </body>
 </html>

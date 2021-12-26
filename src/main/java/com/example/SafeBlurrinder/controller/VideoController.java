@@ -1,6 +1,8 @@
 package com.example.SafeBlurrinder.controller;
 
+import com.example.SafeBlurrinder.domain.ProcessedVideoFile;
 import com.example.SafeBlurrinder.domain.UploadedVideoFile;
+import com.example.SafeBlurrinder.service.ProcessedVideoService;
 import com.example.SafeBlurrinder.service.VideoService;
 import com.example.SafeBlurrinder.util.GenerateHash;
 
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.json.simple.parser.JSONParser;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -28,10 +31,12 @@ import java.util.List;
 @Controller
 public class VideoController {
     private VideoService videoService;
+    private ProcessedVideoService processedVideoService;
 
     @Autowired
-    public VideoController(VideoService videoService) {
+    public VideoController(VideoService videoService,ProcessedVideoService processedVideoService) {
         this.videoService = videoService;
+        this.processedVideoService=processedVideoService;
     }
 
     //root 페이지 -> localhost:8080 -> 비디오 업로드 화면 등장~
@@ -342,6 +347,19 @@ public class VideoController {
             return "redirect:/";
     }
 
+    @GetMapping("/loading/{id}") //localhost:8080/loading하면 화면나옴
+    public String loading(Model model, @PathVariable("id") Long id)
+    {
+        UploadedVideoFile video=videoService.findUploadedVideoById(id);
+        if(video!=null) {
+            model.addAttribute("video",video); //model에 저장 -> 나중에 html파일에서 이름 표시!
+            return "loading";
+        }
+        else//DB에서 해당 id값으로 저장된 data를 찾을 수 없다면, upload로 redirect
+            return "redirect:/";
+
+    }
+
     // "처리 진행" 버튼 선택하면 여기서 FLASK로 데이터 보내고, 결과 받으면 selectFace로 넘어감
     @GetMapping("/processVideo/{id}")
     public String processVideo(Model model, @PathVariable("id") Long id){
@@ -411,12 +429,13 @@ public class VideoController {
 //            System.out.println("jsonObj = " + jsonObj);
 //            System.out.println("jsonArray = " + jsonArray);
             model.addAttribute("cropImages", tempObject);
-
+            model.addAttribute("_id",id);
+//            model.addAttribute("cropImages", jsonArray);
+//            model.addAttribute("cropImages", cropImages);
             return "selectFace";
         } catch (IOException e) {
             e.printStackTrace();
         }
         return "redirect:/";
     }
-
 }

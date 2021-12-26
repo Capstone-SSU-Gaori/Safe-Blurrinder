@@ -8,11 +8,11 @@
 <div>
     <th>Processed Video </th>
     <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
-    <td th:text="${video.originVideoName}"></td>
+    <td th:text="${video.processedVideoName}"></td>
 
 </div>
 <div>
-    <video style="width:500px;" th:src="@{/video/{name}(name=${video.savedVideoName})}"controls></video>
+    <video style="width:500px;" th:src="@{/processedVideo/{name}(name=${video.savedVideoName})}"controls></video>
     <button>저장하기</button>
 </div>
 </body>
