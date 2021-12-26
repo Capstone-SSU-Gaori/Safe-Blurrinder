@@ -407,12 +407,11 @@ public class VideoController {
 //
 //            System.out.println("strBuf.toString() = " + strBuf.toString());
 //            JSONObject jsonObj = new JSONObject((String)new JSONParser().parse(strBuf.toString()));
-
+//
 //            System.out.println("jsonObj = " + jsonObj);
 //            System.out.println("jsonArray = " + jsonArray);
             model.addAttribute("cropImages", tempObject);
-//            model.addAttribute("cropImages", jsonArray);
-//            model.addAttribute("cropImages", cropImages);
+
             return "selectFace";
         } catch (IOException e) {
             e.printStackTrace();
