@@ -13,7 +13,8 @@
 </div>
 <div>
     <video style="width:500px;" th:src="@{/processedVideo/{name}(name=${video.savedVideoName})}"controls></video>
-    <button>저장하기</button>
+<!--    <button>저장하기</button>-->
+    <a th:href="@{http://localhost:8080/download/{id}(id=${video._id})}">저장하기</a>
 </div>
 </body>
 </html>

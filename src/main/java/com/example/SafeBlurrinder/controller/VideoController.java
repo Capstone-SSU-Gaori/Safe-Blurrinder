@@ -20,6 +20,7 @@ import org.json.simple.parser.JSONParser;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -154,5 +155,30 @@ public class VideoController {
             e.printStackTrace();
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/download/{id}")
+    public void download(HttpServletResponse response, @PathVariable("id") Long id) throws Exception {
+        try {
+            ProcessedVideoFile video=processedVideoService.findProcessedVideoById(id);
+            String path=video.getVideoPath();
+            String name=video.getProcessedVideoName();
+
+            File file = new File(path);
+            response.setHeader("Content-Disposition", "attachment;filename=" + name);
+
+            FileInputStream fileInputStream = new FileInputStream(path); // 파일 읽어오기
+            OutputStream out = response.getOutputStream();
+
+            int read = 0;
+            byte[] buffer = new byte[1024];
+            while ((read = fileInputStream.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+
+        } catch (Exception e) {
+            throw new Exception("download error");
+        }
+
     }
 }
