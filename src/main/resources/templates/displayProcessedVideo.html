@@ -2,19 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Result</title>
+    <title>Safe Blurrinder</title>
+    <link rel="stylesheet" href="/css/uploadSuccess.css">
+
 </head>
 <body>
 <div>
-    <th>Processed Video </th>
-    <!--        ${} : 모델 안에 있는 값을 꺼내는 것 -->
-    <td th:text="${video.processedVideoName}"></td>
-
+<!--    <th>Processed Video </th>-->
+<!--    &lt;!&ndash;        ${} : 모델 안에 있는 값을 꺼내는 것 &ndash;&gt;-->
+<!--    <td th:text="${video.processedVideoName}"></td>-->
 </div>
-<div>
-    <video style="width:500px;" th:src="@{/processedVideo/{name}(name=${video.savedVideoName})}"controls></video>
-<!--    <button>저장하기</button>-->
-    <a th:href="@{http://localhost:8080/download/{id}(id=${video._id})}">저장하기</a>
+
+<div class="inner">
+    <header>
+        <h1>Safe Blurrinder</h1>
+    </header>
+    <div>
+        <video style="width:500px;" th:src="@{/processedVideo/{name}(name=${video.savedVideoName})}"controls></video>
+    <!--    <button>저장하기</button>-->
+        <a th:href="@{http://localhost:8080/download/{id}(id=${video._id})}">저장하기</a>
+        <a href="http://localhost:8080/">새로운 영상 처리하기</a>
+    </div>
 </div>
 </body>
 </html>
