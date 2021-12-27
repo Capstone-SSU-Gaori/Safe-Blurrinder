@@ -17,11 +17,16 @@
     <header>
         <h1>Safe Blurrinder</h1>
     </header>
-    <div>
-        <video style="width:500px;" th:src="@{/processedVideo/{name}(name=${video.savedVideoName})}"controls></video>
-    <!--    <button>저장하기</button>-->
-        <a th:href="@{http://localhost:8080/download/{id}(id=${video._id})}">저장하기</a>
-        <a href="http://localhost:8080/">새로운 영상 처리하기</a>
+    <div class="mainBox">
+        <div class="videoBox">
+            <video style="width:500px;" th:src="@{/processedVideo/{name}(name=${video.savedVideoName})}"controls></video>
+        </div>
+        <div class="selectBox">
+            <div class="buttonBox">
+                <a th:href="@{http://localhost:8080/download/{id}(id=${video._id})}" class="btn">저장하기</a>
+                <a href="http://localhost:8080/" class="btn">새로운 영상 처리하기</a>
+            </div>
+        </div>
     </div>
 </div>
 </body>
