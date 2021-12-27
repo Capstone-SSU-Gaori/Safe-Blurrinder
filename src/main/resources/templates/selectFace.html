@@ -36,7 +36,7 @@
 
                         clickedIds.unshift(id);
                         $.ajax({
-                            url:'http://localhost:8080/sendTarget',
+                            url:'http://34.125.188.227:8080/sendTarget',
                             type:'post',
                             traditional:true,
                             redirect:'follow',
@@ -48,7 +48,7 @@
                                 saved_id=response;
                                 console.log(saved_id);
                             }
-                        }).then(response=>window.location.href = "http://localhost:8080/loading2/"+saved_id);
+                        }).then(response=>window.location.href = "http://34.125.188.227:8080/loading2/"+saved_id);
 
                      });
                   /*]]>*/

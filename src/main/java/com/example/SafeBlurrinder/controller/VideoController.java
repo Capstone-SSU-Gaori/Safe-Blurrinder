@@ -52,10 +52,11 @@ public class VideoController {
         if (files.isEmpty())
             return "redirect:/"; // 아무파일도 안올리고 업로드 누를경우 (별도 처리 필요)
 
+        //root/폴더명/비디오명
         String origName = files.getOriginalFilename();
         String[] splited = origName.split("\\.");
         String saveName = new GenerateHash(origName).out() + "." + splited[splited.length - 1];  //hash값.mp4 로 파일 저장, splited[splited.length-1]이 "mp4"임
-        String path = System.getProperty("user.home") + "\\GaoriVideos"; //여기서 user.home: 사용자의 홈 디렉토리(~)
+        String path = System.getProperty("user.home") + "/GaoriVideos"; //여기서 user.home: 사용자의 홈 디렉토리(~)
         // -> 저같은 경우에는 User/users 라서  Users/user/GaoriVideos 폴더안에 비디오가 저장됨니다
 
         if (!new File(path).exists()) {  //위의 폴더가 없다면 새로 생성해줌
@@ -65,7 +66,7 @@ public class VideoController {
                 e.getStackTrace();
             }
         }
-        String filePath = path + "\\" + saveName; //해당 경로에 hash값 + mp4 의 파일을 새로 생성해서
+        String filePath = path + "/" + saveName; //해당 경로에 hash값 + mp4 의 파일을 새로 생성해서
         files.transferTo(new File(filePath));//실제로 저장시켜줌
 
         Long id = 0L;
@@ -108,7 +109,7 @@ public class VideoController {
     @GetMapping("/processVideo/{id}")
     public String processVideo(Model model, @PathVariable("id") Long id){
         // mysql에 저장한 비디오 id를 json 형태로 저장하고 flask로 보내는 코드 시작입니다
-        String url = "http://127.0.0.1:5000/getVideoId"; // flask로 보낼 url
+        String url = "http://34.125.188.227:5000/getVideoId"; // flask로 보낼 url
         StringBuffer stringBuffer=new StringBuffer();
         String sb = "";
         String tempObject= "";

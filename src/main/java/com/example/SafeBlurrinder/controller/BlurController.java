@@ -87,7 +87,7 @@ public class BlurController {
             sendData[i+1]=targets[i];
         }
 
-        String url = "http://127.0.0.1:5000/applyBlur"; // flask로 보낼 url
+        String url = "http://34.125.188.227:5000/applyBlur"; // flask로 보낼 url
         StringBuffer stringBuffer=new StringBuffer();
         String sb = "";
         String processedId= "";
