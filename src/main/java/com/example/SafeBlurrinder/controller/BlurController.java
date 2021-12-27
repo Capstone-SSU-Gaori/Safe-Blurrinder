@@ -48,7 +48,7 @@ public class BlurController {
 
     @RequestMapping(value="/sendTarget")
     @ResponseBody
-    public String sendBlur(HttpServletRequest request, Model models){
+    public String sendBlur(HttpServletRequest request, Model model){
         String[] received=request.getParameterValues("clickedIds");
         System.out.println("process video id: "+received[0]);
         System.out.println("received data");

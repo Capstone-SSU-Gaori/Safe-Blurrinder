@@ -124,14 +124,18 @@
 
         for(var i in objData['cropImages']){
             for(var key in objData['cropImages'][i]){
-                images[i] = cloneImages[i] = new Image();
-                images[i].src = cloneImages[i].src = testUrl+objData['cropImages'][i][key]; //여기서 이미지 넣는데 어떻게 넣어야 하지
-                images[i].id= cloneImages[i].id = i.toString(); // 선택한 객체의 index (선택한 이미지 분류용)
+                images[i] = new Image();
+                cloneImages[i] = new Image();
+                images[i].src= testUrl+objData['cropImages'][i][key]; //여기서 이미지 넣는데 어떻게 넣어야 하지
+                cloneImages[i].src = testUrl+objData['cropImages'][i][key];
+                images[i].id = i.toString(); // 선택한 객체의 index (선택한 이미지 분류용)
+                cloneImages[i].id = i.toString();
                 const splited=key.split("e");
-                images[i].name = cloneImages[i].name = splited[1]; //frame2의 2 가 이미지 이름으로 들어감
+                images[i].name = splited[1]; //frame2의 2 가 이미지 이름으로 들어감
+                cloneImages[i].name = splited[1];
                 document.getElementById("leftBox").appendChild(images[i]);
-                imageClick[i] = cloneImageClick[i] = 0;
-
+                imageClick[i] = 0;
+                cloneImageClick[i] = 0;
             }
         }
 
@@ -159,16 +163,13 @@
                         clickedIds.push($(this).attr("name")); // 클릭하면 해당 요소의 name 값(프레임번호)을 clickedIds에 넣음
                         console.log(clickedIds)
                         document.getElementById($(this).attr("id")).style.outline = "solid 4px #6881D0";
-                        var newItem = document.getElementById($(this).attr("id"));
-                        var criteriaItem = document.getElementById(String(Number($(this).attr("id"))+1))
 
                         var clickedId = Number(clickedIds[clickedIds.length-1])
                         for(var j=0;j<images.length;j++){
-                            if(Number(images[j].name) === clickedId){ // 같은 프레임이면
+                            if(Number(cloneImages[j].name) === clickedId){ // 같은 프레임이면
                                 document.getElementById("rightBox").appendChild(cloneImages[j]);
                             }
                         }
-                        // document.getElementById("leftBox").insertBefore(newItem,criteriaItem); // 왼쪽 박스에 선택한 애는 그대로 남아 있도록
                     }
                 })
                 .mouseover(function() {
