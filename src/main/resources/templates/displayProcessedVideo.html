@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Safe Blurrinder</title>
-    <link rel="stylesheet" href="/css/uploadSuccess.css">
+    <link rel="stylesheet" href="/css/displayProcessedVideo.css">
 
 </head>
 <body>
@@ -24,7 +24,7 @@
         <div class="selectBox">
             <div class="buttonBox">
                 <a th:href="@{http://localhost:8080/download/{id}(id=${video._id})}" class="btn">저장하기</a>
-                <a href="http://localhost:8080/" class="btn">새로운 영상 처리하기</a>
+                <a href="http://localhost:8080/direct" class="btn">수동 블러처리</a>
             </div>
         </div>
     </div>

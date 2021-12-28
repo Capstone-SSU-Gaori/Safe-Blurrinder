@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Safe Blurrinder</title>
+
+    <link rel="stylesheet" href="/css/applyDirectly.css">
+</head>
+<body>
+
+<div class="inner">
+  <header>
+    <h1>Safe Blurrinder</h1>
+  </header>
+  <div class="mainBox">
+    <h3>수동 블러처리</h3>
+    <div class="videoBox">
+      <video style="width:500px;" th:src="@{/processedVideo/{name}(name=${video.savedVideoName})}"controls></video>
+    </div>
+    <div class="selectBox">
+      <div class="buttonBox">
+        <a th:href="@{http://localhost:8080/download/{id}(id=${video._id})}" class="btn">저장</a>
+        <a href="http://localhost:8080/" class="btn">취소</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

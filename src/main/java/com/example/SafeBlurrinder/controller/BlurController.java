@@ -46,6 +46,11 @@ public class BlurController {
         return "loading";
     }
 
+    @GetMapping("/direct")
+    public String direct() {
+        return "applyDirectly";
+    }
+
     @RequestMapping(value="/sendTarget")
     @ResponseBody
     public String sendBlur(HttpServletRequest request, Model model){
