@@ -24,7 +24,7 @@
         <div class="selectBox">
             <div class="buttonBox">
                 <a th:href="@{http://localhost:8080/download/{id}(id=${video._id})}" class="btn">저장하기</a>
-                <a href="http://localhost:8080/direct" class="btn">수동 블러처리</a>
+                <a th:href="@{http://localhost:8080/direct/{id}(id=${video._id})}" class="btn">수동 블러처리</a>
             </div>
         </div>
     </div>

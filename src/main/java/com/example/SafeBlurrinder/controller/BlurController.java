@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -46,8 +43,12 @@ public class BlurController {
         return "loading";
     }
 
-    @GetMapping("/direct")
-    public String direct() {
+    @GetMapping("/direct/{id}")
+    public String direct(@PathVariable("id") Long id, Model model) {
+        ProcessedVideoFile video=processedVideoService.findProcessedVideoById(id);
+        if(video!=null) {
+            model.addAttribute("video",video); //model에 저장 -> 나중에 html파일에서 이름 표시!
+        }
         return "applyDirectly";
     }
 
@@ -141,9 +142,5 @@ public class BlurController {
             e.printStackTrace();
         }
         return "redirect:/";
-
-
-
-
     }
 }
